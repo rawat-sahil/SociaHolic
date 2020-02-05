@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}
+    Wallet Profile
+{% endblock %}
+
+{% block content %}
+    <h1>Wallet</h1>
+    <a href="{% url 'home' %}">Go to home page</a>
+    <p>Hi, {{ user.username }}. This is your wallet</p>
+    <p>Total amount in your wallet :  {{ amount }}</p>
+
+    {#form for adding money to the wallet    #}
+    <form method="post" action="{% url 'addMoney' %}">
+    {% csrf_token %}
+        Enter the amount to be added : <input type="number" step="any" name="amountToBeAdded">
+        <input type="submit" value="ADD MONEY"> <br>
+    </form>
+    <br>
+    <br>
+    {#request money from paticular user #}
+    <form method="post" action="{% url 'requestMoney' %}">
+    {% csrf_token %}
+    <h1>Request Money</h1>
+        Enter Username You want to request for money :
+        <input type="text" name="requestUsername"><br>
+        Enter the amount :
+        <input type="number" name="amountToBeRequested"><br>
+        <input type="submit" value="Request">
+    </form>
+
+    {#send money to paticular user #}
+    <form method="post" action="{% url 'sendMoney' %}">
+    {% csrf_token %}
+    <h1>Send Money</h1>
+        Enter Username You want to send money :
+        <input type="text" name="sendUsername"><br>
+        Enter the amount :
+        <input type="number" name="amountToBeSend"><br>
+        <input type="submit" value="Send">
+    </form>
+
+    {#accept pending money request#}
+    <h1>Pending Request Accept</h1>
+    {% for i in pendingMoneyrequest %}
+        <form method="post" action="{% url 'acceptMoneyRequest' %}">
+            {% csrf_token %}
+            <input type="text" readonly name="acceptRequestUsername" value="{{ i.0 }}">
+            <input type="text" readonly name="acceptRequestAmount" value="{{ i.1 }}">
+            <input type="text" hidden name="acceptRequestTime" value="{{ i.2 }}">
+            <input type="submit" value="accept request">
+
+        </form>
+
+    {% endfor %}
+
+
+    {#delete pending money requests    #}
+    <h1>Delete Pending Requests</h1>
+    {% for i in pendingMoneyrequest %}
+        <form method="post" action="{% url 'deleteMoneyRequest' %}">
+            {% csrf_token %}
+            <input type="text" readonly name="deleteRequestUsername" value="{{ i.0 }}">
+            <input type="text" readonly name="deleteRequestAmount" value="{{ i.1 }}">
+            <input type="text" hidden name="deleteRequestTime" value="{{ i.2 }}">
+            <input type="submit" value="delete request">
+        </form>
+
+    {% endfor %}
+
+
+    {#cancel sent money requests    #}
+    <h1>Cancel Sent Requests</h1>
+    {% for i in sentMoneyRequest  %}
+        <form method="post" action="{% url 'cancelSentMoneyRequest' %}">
+            {% csrf_token %}
+            <input type="text" readonly name="cancelRequestUsername" value="{{ i.0 }}">
+            <input type="text" readonly name="cancelRequestAmount" value="{{ i.1 }}">
+            <input type="text" hidden name="cancelRequestTime" value="{{ i.2 }}">
+            <input type="submit" value="delete request">
+        </form>
+
+    {% endfor %}
+
+
+
+
+{% endblock %}

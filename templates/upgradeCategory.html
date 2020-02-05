@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+    Upgrade Category
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}">go to home</a>
+    <h1>HI, Currently you are {{ currentCategory }} User</h1>
+    <h>upgrade to one of these categories</h>
+    <form method="post" action="{% url 'deductMoney' %}">
+        {% csrf_token %}
+        <select name="category">
+            {% for keys,values in userUpgradeMoney.items %}
+                <option value="{{ keys }}">{{ keys }}  {{ values }}RS.</option>
+            {% endfor %}
+
+        </select>
+        <input type="submit">
+
+    </form>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+    Chat window
+{% endblock %}
+
+{% block content %}
+        <a href="{% url 'home' %}">home</a>
+        {% for i in chat %}
+            <p>{{ i }}</p><br>
+
+
+        {% endfor %}
+        {% if isInUserCategory and isInFriendList %}
+            <form method="post" action="{% url 'sendMessage' %}">
+                {% csrf_token %}
+                <input type="hidden" name="friend" value="{{ friend }}">
+                <input type="text" name="message">
+                <input type="submit" value="SEND MESSAGE">
+            </form>
+
+        {% elif isCommercialUser %}
+             <form method="post" action="{% url 'sendMessage' %}">
+                {% csrf_token %}
+                <input type="hidden" name="friend" value="{{ friend }}">
+                <input type="text" name="message">
+                <input type="submit" value="SEND MESSAGE">
+            </form>
+        {% endif %}
+
+{% endblock %}

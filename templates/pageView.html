@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    Page
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}">go to home</a>
+<h1>{{ PageTitle }}</h1>
+
+    <p>{{ PageContent }}</p>
+
+{% endblock %}

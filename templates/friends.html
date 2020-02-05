@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+    Friends list
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}"> Go to home page</a>
+    {% for i in friends %}
+        <form method="post" name="user" action="{% url 'removeFriend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="searchedUser" value="{{ i }}">
+                    <a href="{% url 'profile' username=i %}" >{{ i }}</a> :
+                    <input type="submit" value="Remove Friend" name="RequestType">
+                    <br>
+                    </form>
+    {% endfor %}
+{% endblock %}

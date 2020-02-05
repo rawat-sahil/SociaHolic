@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+ {% block title %}
+    Search Page
+ {% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}"> Go to home page</a><br>
+
+    {% if user or groups %}
+        {% for i in user %}
+            
+            {% if i.1 == "Remove Friend" %}
+                    <form method="post" name="user" action="{% url 'removeFriend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="searchedUser" value="{{ i.0 }}">
+                    <a href="{% url 'profile' username=i.0 %}" >{{ i.0 }}</a> :
+                    <input type="submit" value="{{ i.1 }}" name="RequestType">
+                    <br>
+                    </form>
+            {% elif i.1 == "Cancel Request" %}
+                   <form method="post" name="user" action="{% url 'cancelFriendRequest' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="searchedUser" value="{{ i.0 }}">
+                    <a href="{% url 'profile' username=i.0 %}" >{{ i.0 }}</a> :
+                    <input type="submit" value="{{ i.1 }}" name="RequestType">
+                    <br>
+                    </form>
+
+            {% elif i.1 == "Accept Friend Request" %}
+                    <form method="post" name="user" action="{% url 'addFriend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="searchedUser" value="{{ i.0 }}">
+                    <a href="{% url 'profile' username=i.0 %}" >{{ i.0 }}</a> :
+                    <input type="submit" value="{{ i.1 }}" name="RequestType">
+                    </form>
+                    <br>
+            {% elif  i.1 == "Send Friend Request" %}
+                    <form method="post" name="user" action="{% url 'sendFriendRequest' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="searchedUser" value="{{ i.0 }}">
+                    <a href="{% url 'profile' username=i.0 %}" >{{ i.0 }}</a> :
+                    <input type="submit" value="{{ i.1 }}" name="RequestType">
+                    </form>
+                    <br>
+            {% endif %}
+            
+        <br>
+        {% endfor %}
+        {% for i in groups %}
+
+            {% if i.1 == "leave group" %}
+                <form method="post" name="group" action="{% url 'leaveGroup' %}">
+            {% csrf_token %}
+            <input type="text" name="searchedGroup" value="{{ i.0 }}" readonly>:
+            <input type="submit" value="{{ i.1 }}" name="RequestType">
+            <br>
+            </form>
+            {% endif %}
+
+            {% if i.1 == "cancel request" %}
+                <form method="post" name="group" action="{% url 'cancelJoinRequest' %}">
+                        {% csrf_token %}
+                    <input type="text" name="group" value="{{ i.0 }}" readonly>
+                    <input type="submit" value="{{ i.1 }}">
+                </form>
+            {% endif %}
+
+            {% if i.1 == "join group" %}
+                <form method="post" name="group" action="{% url 'joinGroup' %}">
+            {% csrf_token %}
+            <input type="text" name="searchedGroup" value="{{ i.0 }}" readonly>:
+            <input type="submit" value="{{ i.1 }}" name="RequestType">
+            <br>
+            </form>
+            {% endif %}
+
+        {% endfor %}
+
+
+    {% else %}
+        <p>no user or group found</p>
+        <a href="{% url 'home' %}"> Go to home page</a>
+    {% endif %}
+{% endblock %}}

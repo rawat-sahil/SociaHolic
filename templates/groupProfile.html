@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}
+    Group Profile
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}">home</a>
+    <h1>{{ groupName }}</h1>
+    {% if isAdmin %}
+        Change Group Privacy, Currently it is set to
+        {% if groupPrivacy %}
+            All
+
+        {% else %}
+            Only Admin
+        {% endif %}
+
+        <form method="post" action="{% url 'changeGroupPrivacy' %}">
+            {% csrf_token %}
+            <input type="hidden" name="groupName" value="{{ groupName }}">
+            <select name="privacy">
+              <option value="Only Admin">Only Admin</option>
+              <option value="All">All</option>
+            </select>
+            <input type="submit" value="change privacy">
+        </form>
+
+        <h3>Pending Requests</h3>
+        {% for i in groupPendingRequest %}
+            <form method="post" action="{% url 'acceptGroupRequest' %}">
+            {% csrf_token %}
+            <input type="hidden" name="groupName" value="{{ groupName }}">
+            <input type="hidden" name="username" value="{{ i }}">
+            {{ i }}
+            <input type="submit" value="accept request">
+            </form>
+        {% endfor %}
+
+    {% endif %}
+
+    <h2>Group Members</h2>
+    {% for i in groupMembers %}
+    {{ i }}  ,
+    {% endfor %}
+
+    <h3>Group Messages</h3>
+    {% for i in groupChat %}
+        <p> {{ i }}</p>
+    {% endfor %}
+
+
+    {% if groupPrivacyForMessage %}
+        <h3>Send Message</h3>
+        <form method="post" action="{% url 'sendGroupMessage' %}">
+            {% csrf_token %}
+            <input type="hidden" name="groupName" value="{{ groupName }}">
+            MESSAGE: <input type="text" name="message">
+            <input type="submit" value="send message">
+        </form>
+    {% endif %}
+
+
+
+{% endblock %}

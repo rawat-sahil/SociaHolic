@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+    chat profile
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}"> home</a>
+
+    {% if isCommercial %}
+        <h4>You are commercial user you can send message to anyone </h4>
+        <form method="post" action="{% url 'sendMessage' %}">
+                {% csrf_token %}
+                Enter User name
+                <input type="text" name="friend"><br>
+                Enter message
+                <input type="text" name="message">
+                <input type="submit" value="SEND MESSAGE">
+            </form>
+    {% endif %}
+    {% for i in friendList %}
+        <form method="post" action="{% url 'chatWindow' %}">
+            {% csrf_token %}
+            <input type="hidden" name="friend" value="{{ i }}">
+            <a href="{% url 'profile' username=i %}">{{ i }}</a>
+            <input type="submit" value="Go to chat window">
+            <br>
+
+
+        </form>
+
+    {% endfor %}
+
+{% endblock %}

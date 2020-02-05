@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}
+    Groups
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'home' %}">home</a>
+
+    {% if canCreateGroup %}
+        <h1>Create Group</h1>
+        <form method="post" action="{% url 'createGroup' %}">
+        {% csrf_token %}
+        Group Name = <input type="text" name="Group Name"><br>
+        Joining Fees =<input type="number" step="any" name="joiningCost"><br>
+        <input type="submit" value="Create Group">
+        </form>
+    {% endif %}
+
+
+    <h1>joined Groups</h1>
+    {% for i in joinedGroups %}
+        <form method="post" action="{% url 'sendGroupMessage' %}">
+        {% csrf_token %}
+        <a href="{% url 'groupsProfile' groupName=i %}">{{ i }}</a>
+        <input type="hidden" name="group" value="{{ i }}">
+        </form>
+    {% endfor %}
+
+    <h1>Created Groups</h1>
+
+    {% for i in createdGroups %}
+        <form method="post" action="{% url 'sendGroupMessage' %}">
+        {% csrf_token %}
+        <a href="{% url 'groupsProfile' groupName=i %}">{{ i }}</a>
+        <input type="hidden" name="group" value="{{ i }}">
+        </form>
+    {% endfor %}
+
+    <h1>sent request</h1>
+    {% for i in sentGroupRequest %}
+    <form method="post" action="{% url 'cancelJoinRequest' %}">
+        {% csrf_token %}
+        <a href="{% url 'groupsProfile' groupName=i %}">{{ i }}</a>
+        <input type="hidden" name="group" value="{{ i }}">
+        <input type="submit" value="cancel join Request">
+        </form>
+    {% endfor %}
+
+
+
+{% endblock %}

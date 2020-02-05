@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}
+    Profile Page
+{% endblock %}
+
+{% block content %}
+    <h1>{{ username }}</h1>
+    <h3>Email : {{ email }}</h3>
+    <a href="{% url 'home' %}">go to home page</a><br>
+    {% if loggedInUser == username %}
+        <form method="post" action="{% url 'postPrivacySetting' %}">
+            {% csrf_token %}
+            <input type="hidden" name="profileUser" value="{{ username }}">
+            <p>Who can post on your timeline Currently it is set to {{ privacySetting }}:
+            <select name="postPrivacySetting">
+                <option value="friends">Friends</option>
+                <option value="onlyMe">Only me</option>
+            </select>
+            <input type="submit" value="Save">
+            </p>
+        </form>
+    {% endif %}
+
+
+
+    <form method="post"  action="{% url 'post' %}">
+        {% csrf_token %}
+        <input type="hidden" name="profileUser" value="{{ username }}">
+        <input type="text" name="toBePosted" ><br>
+        <input type="submit" value="Post">
+    <br>
+    </form>
+    {% for i in posts %}
+        {% if loggedInUser == username %}
+            <form method="post" action="{% url 'deletePost' %}">
+                {% csrf_token %}
+                <input type="hidden" name="profileUser" value="{{ username }}">
+                <input type="text" name="post" value="{{ i }}" readonly >
+                <input type="submit" value="delete">
+            </form>
+        {% else %}
+            <p>{{ i }}</p><br>
+        {% endif %}
+
+
+    {% endfor %}
+
+
+
+
+{% endblock %}

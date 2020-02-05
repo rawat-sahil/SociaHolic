@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    Homepage
+{% endblock %}
+ {% block content %}
+    {% if user.is_authenticated %}
+
+       Hi, <a href="{% url 'profile' username=user.username %}">{{ user.username }}<br></a>
+        <a href="{% url 'walletProfile' %}">Wallet</a><br>
+        <a href="{% url 'pendingFriendRequest' %}"> Pending Friend Requests</a><br>
+        <a href="{% url 'sentFriendRequest' %}"> Sent Requests</a><br>
+        <a href="{% url 'friends' %}">Friend List</a><br>
+        <a href="{% url 'chatList' %}">Chat with Friends</a><br>
+        <a href="{% url 'upgradeCategory' %}">Upgrade Category</a><br>
+        <a href="{% url 'group' %}">Groups</a><br>
+        <a href="{% url 'createPage' %}">Create page</a><br>
+        <a href="{% url 'list' %}">list pages</a>
+        <form action="{% url 'search' %}" method="post">
+            {% csrf_token %}
+            Search Friend or group:
+            <input type="text" name="Friend and groups">
+            <input type="submit" value="submit">
+        </form>
+
+
+        <br>
+        <a href="{% url 'logout' %}">Logout</a>
+        <br>
+        <a href="{% url 'password_reset' %}">change password</a>
+    {% else %}
+        You are not logged in
+        <br>
+        <a href="{% url 'login' %}"> Login</a>
+        <br>
+        <a href="{% url 'password_reset' %}">reset password</a>
+        <br>
+        <a href="{% url 'signup' %}">signup</a>
+
+    {% endif %}
+ {% endblock %}
